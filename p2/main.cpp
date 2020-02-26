@@ -39,6 +39,7 @@ int main(int argc, char** argv) {
         std::ifstream training(training_file, std::ios_base::binary);
         std::vector<unsigned long> ret;
         unsigned long id, num_points, dims;
+        std::vector<float> points; //
         if (training) {
             training.seekg(0, training.end);
             size_t size = training.tellg();
@@ -50,10 +51,11 @@ int main(int argc, char** argv) {
             //training.read(id, 8);
             //training.read(num_points, 8);
             //training.read(dims, 8);
+
             //todo: populate a vector of floats from the training file
-            std::vector<float> points;
             training.close();
         }
+        cs547::Tree<float, 4> my_tree;
 
     }
     return 0;

@@ -52,11 +52,11 @@ namespace cs547 {
             //_point point;
             int index;
             int axis;
-            Node* children[2];
-            //Node* left;
-            //Node* right;
-            Node() : index(-1), axis(-1) {
-                children[0] = children[1] = nullptr;
+            //Node* children[2];
+            std::unique_ptr<Node> left;
+            std::unique_ptr<Node> right;
+            Node() : index(-1), axis(-1), left(nullptr), right(nullptr) {
+                //children[0] = children[1] = nullptr;
             }
             /*T get(size_t i) const {
                 return point.get(i);
@@ -65,16 +65,18 @@ namespace cs547 {
                 return point.distance(p);
             }*/
         };
-        Node* root;
+        std::unique_ptr<Node> root;
         //Node* ideal; //Node* to Node* with best distance
         float best_distance;
         //std::vector<Node*> nodes;
         std::vector<_point> points;
         //std::vector<_point>
         Tree() : root(nullptr) {
+                std::cout << "I am a tree." << std::endl;
         }
         ~Tree() {
-            clearRecursive(root);
+            //clearRecursive(root);
+            std::cout << "Destroying tree." << std::endl;
             points.clear();
             root = nullptr;
         }
@@ -83,7 +85,7 @@ namespace cs547 {
             for(size_t i = 0; i < indices.size(); i++) {
                 indices[i] = i;
             }
-            root = construct(indices, points.size(), 0);
+            root = construct(indices.data(), points.size(), 0);
         }
 
         bool empty() const {
@@ -111,20 +113,20 @@ namespace cs547 {
             n->index = indices[mid];
             n->axis = axis;
 
-            n->next[0] = construct(indices, mid, depth + 1);
-            n->next[1] = construct(indices, num_points - mid - 1, depth+ 1);
+            n->left= construct(indices, mid, depth + 1);
+            n->right = construct(indices, num_points - mid - 1, depth+ 1);
             return n;
         }
-        void clearRecursive(Node* n) {
+        /*void clearRecursive(std::unique_ptr<Node> n) {
             if(n == nullptr) {
                 return;
             }
-            if(n->next[0])
-                clearRecursive(n->next[0]);
-            if(n->next[1])
-                clearRecursive(n->next[1]);
+            if(n->left)
+                clearRecursive(n->left);
+            if(n->right)
+                clearRecursive(n->right);
             delete n;
-        }
+        }*/
     };
 }
 #endif
